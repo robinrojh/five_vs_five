@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "1004474865919",
+    "project_id": "league-five-vs-five",
+    "storage_bucket": "league-five-vs-five.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1004474865919:android:acad5eef85a27ce88254ca",
+        "android_client_info": {
+          "package_name": "com.example.five_by_five"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1004474865919-f83sph6qhrtb1fsqktqfa80gl7rad5ej.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDucrd1ckAoLRqcZ8EStlOErwcn6b4fruo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1004474865919-f83sph6qhrtb1fsqktqfa80gl7rad5ej.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1004474865919-phqfpd773ooc8kq4lfso0hk3g355jri4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.fiveByFive"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
