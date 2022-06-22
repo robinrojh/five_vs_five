@@ -6,13 +6,12 @@ abstract class PlayerRepository {
     FirebaseFirestore db = FirebaseFirestore.instance;
     var collection = await db.collection("players").get();
     var documentList = collection.docs;
-    List<Player> playerList = List<Player>.empty();
+    List<Player> playerList = List<Player>.empty(growable: true);
     for (var element in documentList) {
       var data = element.data();
       Player player = Player.createPlayer(data);
       playerList.add(player);
     }
-    print(playerList);
     return playerList;
   }
 

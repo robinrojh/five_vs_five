@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:five_by_five/src/player/data/repository/player_repository.dart';
 import 'package:five_by_five/src/player/domain/player.dart';
 
+FirebaseFirestore db = FirebaseFirestore.instance;
 class FirestorePlayerRepository implements PlayerRepository {
-  FirebaseFirestore db = FirebaseFirestore.instance;
 
   @override
   Future<Player> getPlayer({required PlayerId playerId}) async {

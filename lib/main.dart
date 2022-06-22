@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:five_by_five/firebase_options.dart';
 import 'package:five_by_five/src/player/data/repository/player_repository.dart';
 import 'package:five_by_five/src/player/domain/player.dart';
+import 'package:five_by_five/src/player/presentation/player_card_list.dart';
 import 'package:flutter/material.dart';
 
 Future<void> main() async {
@@ -45,21 +46,13 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   List<Player> _playerList = List<Player>.empty();
   void _getPlayers() async {
-    PlayerRepository.getPlayers().then((value) => print(value));
+    _playerList = await PlayerRepository.getPlayers();
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // Here we take the value from the Home object that was created by
-        // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
       body: Center(
@@ -85,10 +78,7 @@ class _HomeState extends State<Home> {
             const Text(
               'Players',
             ),
-            Text(
-              '$_playerList',
-              style: Theme.of(context).textTheme.headline4,
-            ),
+            PlayerCardList(playerList: _playerList)
           ],
         ),
       ),
