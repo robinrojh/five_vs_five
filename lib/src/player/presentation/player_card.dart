@@ -1,4 +1,3 @@
-import 'package:five_by_five/src/player/data/repository/firestore_player_repository.dart';
 import 'package:five_by_five/src/player/domain/player.dart';
 import 'package:flutter/material.dart';
 
@@ -14,6 +13,7 @@ class PlayerCard extends StatefulWidget {
 class _PlayerCardState extends State<PlayerCard> {
   @override
   Widget build(BuildContext context) {
-    return Text(widget.player.toString());
+    return Center(
+      child: Text(widget.player.toString()));
   }
 }

@@ -1,5 +1,6 @@
-import 'package:five_by_five/src/player/data/repository/player_repository.dart';
+import 'package:five_by_five/src/player/data/repository/firestore_player_repository.dart';
 import 'package:five_by_five/src/player/domain/player.dart';
+import 'package:five_by_five/src/player/presentation/player_card.dart';
 import 'package:flutter/material.dart';
 
 class PlayerCardList extends StatefulWidget {
@@ -13,20 +14,14 @@ class PlayerCardList extends StatefulWidget {
 }
 
 class _PlayerCardListState extends State<PlayerCardList> {
-  late Future<List<Player>> futurePlayerList;
-
-  @override
-  void initState() {
-    super.initState();
-    futurePlayerList = PlayerRepository.getPlayers();
-  }
-
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Player>>(
-        future: futurePlayerList,
-        builder: (context, snapshot) {
-          return Text(snapshot.data![0].toString());
+    // return Text(widget.playerList[0].toString());
+    return ListView.builder(
+        shrinkWrap: true,
+        itemCount: widget.playerList.length,
+        itemBuilder: (context, index) {
+          return PlayerCard(player: widget.playerList[index]);
         });
   }
 }

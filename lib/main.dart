@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:five_by_five/firebase_options.dart';
-import 'package:five_by_five/src/player/data/repository/player_repository.dart';
+import 'package:five_by_five/src/player/data/repository/firestore_player_repository.dart';
 import 'package:five_by_five/src/player/domain/player.dart';
 import 'package:five_by_five/src/player/presentation/player_card_list.dart';
 import 'package:flutter/material.dart';
@@ -45,12 +45,26 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   List<Player> _playerList = List<Player>.empty();
+  bool isLoading = true;
+  
+  @override
+  void initState() {
+    _getPlayers();
+    super.initState();
+  }
+
   void _getPlayers() async {
-    _playerList = await PlayerRepository.getPlayers();
+    _playerList = await FirestorePlayerRepository.getPlayers();
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      return const CircularProgressIndicator(strokeWidth: 5.0,);
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -85,7 +99,7 @@ class _HomeState extends State<Home> {
       floatingActionButton: FloatingActionButton(
         onPressed: _getPlayers,
         tooltip: 'Refresh List',
-        child: const Icon(Icons.add),
+        child: const Icon(Icons.refresh),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
