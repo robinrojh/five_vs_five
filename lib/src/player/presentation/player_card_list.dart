@@ -1,4 +1,3 @@
-import 'package:five_by_five/src/player/data/repository/firestore_player_repository.dart';
 import 'package:five_by_five/src/player/domain/player.dart';
 import 'package:five_by_five/src/player/presentation/player_card.dart';
 import 'package:flutter/material.dart';

@@ -24,4 +24,9 @@ class Team {
     return "$title\n"
         "${playerList.keys.map((e) => "$e\n")}";
   }
+
+  static createTeam(Map<String, dynamic> teamData) {
+    Map<PlayerId, PlayerPermissions> players = teamData[playerList];
+    return Team(teamData[title], players);
+  }
 }

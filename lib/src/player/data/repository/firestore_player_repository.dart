@@ -19,8 +19,9 @@ class FirestorePlayerRepository {
 
   static Future<Player> getPlayer({required PlayerId playerId}) async {
     var document = await db.collection("players").doc(playerId).get();
-    Player playerData = document.data() as Player;
-    return playerData;
+    var data = document.data();
+    Player player = Player.createPlayer(data as Map<String, dynamic>);
+    return player;
   }
 
   static Future<void> addPlayer({required Player player}) async {
