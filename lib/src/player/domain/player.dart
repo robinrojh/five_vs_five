@@ -36,6 +36,15 @@ class Player {
     };
   }
 
+  @override
+  bool operator ==(Object other) {
+    if (other is Player) {
+      return playerId == other.playerId;
+    } else {
+      return false;
+    }
+  }
+
   static Player createPlayer(Map<String, dynamic> playerData) {
     List<String> currentRank = List<String>.from(playerData["currentRank"]);
     List<String> highestRank = List<String>.from(playerData["highestRank"]);

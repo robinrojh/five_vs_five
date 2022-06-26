@@ -13,6 +13,16 @@ class PlayerCardList extends StatefulWidget {
 }
 
 class _PlayerCardListState extends State<PlayerCardList> {
+  List<Player> _selectedPlayerList = [];
+
+  void handleCheckbox(bool isChecked, Player player) {
+    if (isChecked) {
+      _selectedPlayerList.add(player);
+    } else {
+      _selectedPlayerList.remove(player);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     // return Text(widget.playerList[0].toString());
@@ -20,7 +30,10 @@ class _PlayerCardListState extends State<PlayerCardList> {
         shrinkWrap: true,
         itemCount: widget.playerList.length,
         itemBuilder: (context, index) {
-          return PlayerCard(player: widget.playerList[index]);
+          return PlayerCard(
+            player: widget.playerList[index],
+            callback: handleCheckbox,
+          );
         });
   }
 }
