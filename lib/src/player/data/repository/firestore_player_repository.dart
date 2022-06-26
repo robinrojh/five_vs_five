@@ -17,13 +17,6 @@ class FirestorePlayerRepository {
     return playerList;
   }
 
-  static Future<Player> getPlayer({required PlayerId playerId}) async {
-    var document = await db.collection("players").doc(playerId).get();
-    var data = document.data();
-    Player player = Player.createPlayer(data as Map<String, dynamic>);
-    return player;
-  }
-
   static Future<void> addPlayer({required Player player}) async {
     await db.collection("players").doc(player.playerId).set(<String, dynamic>{
       "playerId": player.playerId,
@@ -31,5 +24,19 @@ class FirestorePlayerRepository {
       "currentRank": player.currentRank,
       "highestRank": player.highestRank,
     });
+  }
+
+  static Future<void> editPlayer(
+      {required Player player, required Player editedPlayer}) async {
+    await db.collection("players").doc(player.playerId).set(<String, dynamic>{
+      "playerId": player.playerId,
+      "name": player.name,
+      "currentRank": player.currentRank,
+      "highestRank": player.highestRank,
+    });
+  }
+
+  static Future<void> deletePlayer({required Player player}) async {
+    await db.collection("players").doc(player.playerId).delete();
   }
 }

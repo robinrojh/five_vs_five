@@ -46,7 +46,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   List<Player> _playerList = List<Player>.empty();
   bool isLoading = true;
-  
+
   @override
   void initState() {
     _getPlayers();
@@ -63,7 +63,9 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
-      return const CircularProgressIndicator(strokeWidth: 5.0,);
+      return const CircularProgressIndicator(
+        strokeWidth: 5.0,
+      );
     }
     return Scaffold(
       appBar: AppBar(
