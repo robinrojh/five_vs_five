@@ -26,7 +26,7 @@ class Team {
   }
 
   static createTeam(Map<String, dynamic> teamData) {
-    Map<PlayerId, PlayerPermissions> players = teamData[playerList];
-    return Team(teamData[title], players);
+    Map<PlayerId, PlayerPermissions> players = teamData["playerList"];
+    return Team(title: teamData["title"], playerList: players);
   }
 }
