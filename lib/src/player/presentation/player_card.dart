@@ -13,7 +13,13 @@ class PlayerCard extends StatefulWidget {
 class _PlayerCardState extends State<PlayerCard> {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text(widget.player.toString()));
+    return Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+      SizedBox(
+          width: 960,
+          child: Card(
+              child: Padding(
+                  padding: EdgeInsets.all(24.0),
+                  child: Text(widget.player.toString()))))
+    ]);
   }
 }

@@ -18,11 +18,12 @@ class Player {
 
   @override
   String toString() {
+    String mainLanesString = mainLanes.join(", ");
     return "Player ID: $playerId\n"
         "Name: $name\n"
-        "Main Lane: $mainLanes\n"
-        "Current Rank: $currentRank\n"
-        "Highest Rank: $highestRank\n";
+        "Main Lane: $mainLanesString\n"
+        "Current Rank: ${currentRank[0]} ${currentRank[1]}\n"
+        "Highest Rank: ${highestRank[0]} ${highestRank[1]}";
   }
 
   Map<String, dynamic> toMap() {
