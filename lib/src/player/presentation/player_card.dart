@@ -42,7 +42,7 @@ class _PlayerCardState extends State<PlayerCard> {
                                 value: isChecked, onChanged: onCheckboxClick),
                           ),
                           Text(
-                              style: const TextStyle(fontSize: 24.0),
+                              style: const TextStyle(fontSize: 16.0),
                               widget.player.toString()),
                         ]))))),
         TextButton(
