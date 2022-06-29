@@ -71,7 +71,8 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Center(
+      body: SingleChildScrollView(
+          child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -82,7 +83,7 @@ class _HomeState extends State<Home> {
             PlayerCardList(playerList: _playerList)
           ],
         ),
-      ),
+      )),
       floatingActionButton: FloatingActionButton(
         onPressed: _getPlayers,
         tooltip: 'Refresh List',

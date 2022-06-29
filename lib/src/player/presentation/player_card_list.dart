@@ -26,7 +26,6 @@ class _PlayerCardListState extends State<PlayerCardList> {
 
   @override
   Widget build(BuildContext context) {
-    // return Text(widget.playerList[0].toString());
     return SizedBox(
       width: 1280,
       child: Column(children: <Widget>[

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:five_by_five/src/player/domain/player.dart';
+import 'package:flutter/cupertino.dart';
 
 FirebaseFirestore db = FirebaseFirestore.instance;
 
@@ -18,12 +19,25 @@ class FirestorePlayerRepository {
   }
 
   static Future<void> addPlayer({required Player player}) async {
-    await db.collection("players").doc(player.playerId).set(<String, dynamic>{
-      "playerId": player.playerId,
-      "name": player.name,
-      "currentRank": player.currentRank,
-      "highestRank": player.highestRank,
+    DocumentReference<Map<String, dynamic>> playerRef =
+        db.collection("players").doc(player.playerId);
+    bool isSuccess = false;
+    await db.runTransaction((transaction) async {
+      var doc = await transaction.get(playerRef);
+      if (!doc.exists) {
+        transaction.set(playerRef, <String, dynamic>{
+          "playerId": player.playerId,
+          "name": player.name,
+          "currentRank": player.currentRank.rank,
+          "highestRank": player.highestRank.rank,
+          "mainLanes": player.mainLanes,
+        });
+        isSuccess = true;
+      }
     });
+    if (!isSuccess) {
+      throw Exception("This player already exists!");
+    }
   }
 
   static Future<void> editPlayer(
