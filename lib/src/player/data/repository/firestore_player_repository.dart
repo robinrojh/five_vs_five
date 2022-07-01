@@ -42,12 +42,19 @@ class FirestorePlayerRepository {
 
   static Future<void> editPlayer(
       {required Player player, required Player editedPlayer}) async {
-    await db.collection("players").doc(player.playerId).set(<String, dynamic>{
-      "playerId": player.playerId,
-      "name": player.name,
-      "currentRank": player.currentRank,
-      "highestRank": player.highestRank,
-    });
+    if (player != editedPlayer) {
+      await db
+          .collection("players")
+          .doc(player.playerId)
+          .update(<String, dynamic>{
+        "name": editedPlayer.name,
+        "currentRank": editedPlayer.currentRank.rank,
+        "highestRank": editedPlayer.highestRank.rank,
+        "mainLanes": editedPlayer.mainLanes,
+      });
+    } else {
+      throw Exception("At least one field must be edited.");
+    }
   }
 
   static Future<void> deletePlayer({required Player player}) async {

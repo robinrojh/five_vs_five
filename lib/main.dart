@@ -88,7 +88,7 @@ class _HomeState extends State<Home> {
         onPressed: _getPlayers,
         tooltip: 'Refresh List',
         child: const Icon(Icons.refresh),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ),
     );
   }
 }
