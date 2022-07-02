@@ -46,7 +46,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   List<Player> _playerList = List<Player>.empty();
   bool isLoading = true;
-  
+
   @override
   void initState() {
     _getPlayers();
@@ -63,44 +63,32 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
-      return const CircularProgressIndicator(strokeWidth: 5.0,);
+      return const CircularProgressIndicator(
+        strokeWidth: 5.0,
+      );
     }
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
+      body: SingleChildScrollView(
+          child: Center(
         child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text(
               'Players',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
             ),
             PlayerCardList(playerList: _playerList)
           ],
         ),
-      ),
+      )),
       floatingActionButton: FloatingActionButton(
         onPressed: _getPlayers,
         tooltip: 'Refresh List',
         child: const Icon(Icons.refresh),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ),
     );
   }
 }
