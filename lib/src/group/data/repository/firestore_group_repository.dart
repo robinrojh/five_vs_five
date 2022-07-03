@@ -6,16 +6,28 @@ FirebaseFirestore db = FirebaseFirestore.instance;
 
 class FirestoreGroupRepository {
   static Future<List<Group>> getGroups() async {
+    var groupRef = db.collection("groups");
+    List<QueryDocumentSnapshot<Map<String, dynamic>>> docs =
+        (await groupRef.get()).docs;
     List<Group> groupList = List<Group>.empty(growable: true);
-    List<QueryDocumentSnapshot<Map<String, dynamic>>> docs = (await db.collection("groups").get()).docs;
-    for (var element in docs) {
-      // Create a temporary empty map that maps group ID to group data.
-      Map<String, dynamic> docData = {};
-      // Puts the id as key and data as value.
-      docData.putIfAbsent(element.id, () => element.data());
-      // Add the group created from the map into groupList.
-      groupList.add(Group.createGroup(docData));
-    }
+    await db.runTransaction((transaction) async {
+      Future.wait(docs.map((element) async {
+        var data = element.data();
+
+        List<dynamic> playerList = data["playerList"];
+        playerList = playerList.map((element) {
+          var playerData = element.get();
+          Player player = Player.createPlayer(playerData);
+          return player;
+        }).toList();
+
+        groupList.add(Group.createGroup({
+          "groupId": data["groupId"],
+          "title": data["title"],
+          "playerList": playerList,
+        }));
+      }));
+    });
     return groupList;
   }
 
@@ -32,5 +44,7 @@ class FirestoreGroupRepository {
   }
 
   static Future<void> editGroup(
-      {required Group group, required Group editedGroup}) async {}
+      {required Group group, required Group editedGroup}) async {
+    throw Exception("Function isn't ready yet.");
+  }
 }

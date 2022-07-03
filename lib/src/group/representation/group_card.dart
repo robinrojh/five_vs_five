@@ -1,0 +1,80 @@
+import 'package:five_by_five/src/group/data/repository/firestore_group_repository.dart';
+import 'package:five_by_five/src/group/domain/group.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
+class GroupCard extends StatefulWidget {
+  GroupCard({required this.group});
+
+  final Group group;
+
+  @override
+  _GroupCardState createState() => _GroupCardState();
+}
+
+class _GroupCardState extends State<GroupCard> {
+  onGroupCardClick() {}
+
+  showDeleteDialog(BuildContext context, Group group) {
+    // set up the buttons
+    Widget cancelButton = TextButton(
+      child: Text("Cancel"),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+    Widget continueButton = TextButton(
+      child: Text("Delete"),
+      onPressed: () {
+        FirestoreGroupRepository.deleteGroup(groupId: group.groupId);
+        Navigator.of(context).pop();
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Confirm Delete?"),
+      content: Text(
+          "Are you sure you want to delete this group? This action is irreversible."),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+      Row(children: <Widget>[
+        GestureDetector(
+            onTap: () => {onGroupCardClick()},
+            child: SizedBox(
+                width: 960,
+                child: Card(
+                    child: Padding(
+                        padding: const EdgeInsets.all(24.0),
+                        child: Row(children: <Widget>[
+                          Text(
+                              style: const TextStyle(fontSize: 16.0),
+                              widget.group.toString()),
+                        ]))))),
+        Padding(padding: const EdgeInsets.fromLTRB(8.0, 0, 0, 0)),
+        TextButton(
+            style: TextButton.styleFrom(backgroundColor: Colors.red),
+            onPressed: () {
+              showDeleteDialog(context, widget.group);
+            },
+            child: Text(style: TextStyle(color: Colors.white), "Delete")),
+      ])
+    ]);
+  }
+}
