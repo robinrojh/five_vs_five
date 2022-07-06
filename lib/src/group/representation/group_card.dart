@@ -1,12 +1,18 @@
 import 'package:five_by_five/src/group/data/repository/firestore_group_repository.dart';
 import 'package:five_by_five/src/group/domain/group.dart';
+import 'package:five_by_five/src/player/presentation/player_card_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class GroupCard extends StatefulWidget {
-  GroupCard({required this.group});
+  GroupCard(
+      {required this.group,
+      this.displayDelete = true,
+      this.displayEdit = false});
 
   final Group group;
+  final bool displayDelete;
+  final bool displayEdit;
 
   @override
   _GroupCardState createState() => _GroupCardState();
@@ -46,7 +52,11 @@ class _GroupCardState extends State<GroupCard> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return alert;
+        if (widget.displayDelete) {
+          return alert;
+        } else {
+          return Container();
+        }
       },
     );
   }
@@ -58,15 +68,15 @@ class _GroupCardState extends State<GroupCard> {
         GestureDetector(
             onTap: () => {onGroupCardClick()},
             child: SizedBox(
-                width: 960,
+                width: 1560,
                 child: Card(
+                    elevation: 5.0,
                     child: Padding(
                         padding: const EdgeInsets.all(24.0),
-                        child: Row(children: <Widget>[
-                          Text(
-                              style: const TextStyle(fontSize: 16.0),
-                              widget.group.toString()),
-                        ]))))),
+                        child: Center(
+                          child: PlayerCardList(
+                              playerList: widget.group.playerList, displayEdit: widget.displayEdit, displayForm: false,),
+                        ))))),
         Padding(padding: const EdgeInsets.fromLTRB(8.0, 0, 0, 0)),
         TextButton(
             style: TextButton.styleFrom(backgroundColor: Colors.red),

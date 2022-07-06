@@ -84,7 +84,7 @@ class _HomeState extends State<Home> {
               'Players',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
             ),
-            PlayerCardList(playerList: _playerList)
+            PlayerCardList(playerList: _playerList, displayForm: true,)
           ],
         ),
       )),

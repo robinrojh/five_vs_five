@@ -11,22 +11,23 @@ class FirestoreGroupRepository {
         (await groupRef.get()).docs;
     List<Group> groupList = List<Group>.empty(growable: true);
     await db.runTransaction((transaction) async {
-      Future.wait(docs.map((element) async {
+      for (var element in docs) {
         var data = element.data();
+        List playerDataList = data["playerList"];
+        List<Player> playerList = [];
+        for (var playerRef in playerDataList) {
+          var playerData = (await transaction.get(playerRef));
+          playerList.add(
+              Player.createPlayer(playerData.data() as Map<String, dynamic>));
+        }
 
-        List<dynamic> playerList = data["playerList"];
-        playerList = playerList.map((element) {
-          var playerData = element.get();
-          Player player = Player.createPlayer(playerData);
-          return player;
-        }).toList();
-
-        groupList.add(Group.createGroup({
+        Group resultGroup = Group.createGroup({
           "groupId": data["groupId"],
           "title": data["title"],
           "playerList": playerList,
-        }));
-      }));
+        });
+        groupList.add(resultGroup);
+      }
     });
     return groupList;
   }

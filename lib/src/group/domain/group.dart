@@ -25,9 +25,12 @@ class Group {
     if (groupData.isEmpty) {
       return Group(groupId: "", title: "", playerList: <Player>[]);
     }
+    if (groupData.containsValue(null)) {
+      return null;
+    }
     List<Player> players = groupData["playerList"];
     return Group(
-        groupId: groupData["GroupId"],
+        groupId: groupData["groupId"],
         title: groupData["title"],
         playerList: players);
   }
