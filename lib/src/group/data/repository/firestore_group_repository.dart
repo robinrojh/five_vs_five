@@ -40,8 +40,21 @@ class FirestoreGroupRepository {
     await db.collection("groups").add(groupMap);
   }
 
+  static Future<void> addToGroup({required GroupId groupId, required PlayerId playerId}) async {
+    await db.collection("groups").doc(groupId).update({
+      "playerList": FieldValue.arrayUnion([playerId]),
+    });
+  }
+
   static Future<void> deleteGroup({required GroupId groupId}) async {
     await db.collection("groups").doc(groupId).delete();
+  }
+
+  static Future<void> deleteFromGroup(
+      {required GroupId groupId, required PlayerId playerId}) async {
+    await db.collection("groups").doc(groupId).update({
+      "playerList": FieldValue.arrayRemove([playerId]),
+    });
   }
 
   static Future<void> editGroup(

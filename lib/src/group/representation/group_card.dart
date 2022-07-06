@@ -75,7 +75,15 @@ class _GroupCardState extends State<GroupCard> {
                         padding: const EdgeInsets.all(24.0),
                         child: Center(
                           child: PlayerCardList(
-                              playerList: widget.group.playerList, displayEdit: widget.displayEdit, displayForm: false,),
+                            playerList: widget.group.playerList,
+                            displayEdit: widget.displayEdit,
+                            displayForm: false,
+                            deleteFunction: (player) {
+                              FirestoreGroupRepository.deleteFromGroup(
+                                  groupId: widget.group.groupId,
+                                  playerId: player.playerId);
+                            },
+                          ),
                         ))))),
         Padding(padding: const EdgeInsets.fromLTRB(8.0, 0, 0, 0)),
         TextButton(

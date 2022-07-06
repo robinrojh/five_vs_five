@@ -3,18 +3,22 @@ import 'package:five_by_five/src/player/domain/player.dart';
 import 'package:five_by_five/src/player/presentation/edit_player_form.dart';
 import 'package:flutter/material.dart';
 
+typedef DeletePlayerFunction = void Function(Player player);
+
 class PlayerCard extends StatefulWidget {
   PlayerCard({
     required this.player,
     required this.callback,
     this.displayDelete = true,
     this.displayEdit = true,
+    this.deleteFunction,
   }) : super(key: ObjectKey(player));
 
   final Player player;
   final Function callback;
   final bool displayDelete;
   final bool displayEdit;
+  final DeletePlayerFunction? deleteFunction;
 
   @override
   _PlayerCardState createState() => _PlayerCardState();
@@ -33,7 +37,11 @@ class _PlayerCardState extends State<PlayerCard> {
     Widget continueButton = TextButton(
       child: Text("Delete"),
       onPressed: () {
-        FirestorePlayerRepository.deletePlayer(player: player);
+        if (widget.deleteFunction == null) {
+          FirestorePlayerRepository.deletePlayer(player: player);
+        } else {
+          widget.deleteFunction!(player);
+        }
         Navigator.of(context).pop();
       },
     );

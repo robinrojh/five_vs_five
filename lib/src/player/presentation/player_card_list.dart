@@ -8,6 +8,7 @@ class PlayerCardList extends StatefulWidget {
       {required this.playerList,
       this.displayDelete = true,
       this.displayEdit = true,
+      this.deleteFunction,
       required this.displayForm})
       : super(key: ObjectKey(playerList));
 
@@ -15,6 +16,7 @@ class PlayerCardList extends StatefulWidget {
   final bool displayDelete;
   final bool displayEdit;
   final bool displayForm;
+  final DeletePlayerFunction? deleteFunction;
 
   @override
   _PlayerCardListState createState() => _PlayerCardListState();
@@ -46,6 +48,7 @@ class _PlayerCardListState extends State<PlayerCardList> {
                   callback: handleCheckbox,
                   displayDelete: widget.displayDelete,
                   displayEdit: widget.displayEdit,
+                  deleteFunction: widget.deleteFunction,
                 );
               })
         ]));
