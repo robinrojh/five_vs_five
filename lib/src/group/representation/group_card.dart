@@ -19,7 +19,9 @@ class GroupCard extends StatefulWidget {
 }
 
 class _GroupCardState extends State<GroupCard> {
-  onGroupCardClick() {}
+  onGroupCardClick() {
+    print(widget.group);
+  }
 
   showDeleteDialog(BuildContext context, Group group) {
     // set up the buttons
@@ -73,17 +75,28 @@ class _GroupCardState extends State<GroupCard> {
                     elevation: 5.0,
                     child: Padding(
                         padding: const EdgeInsets.all(24.0),
-                        child: Center(
-                          child: PlayerCardList(
-                            playerList: widget.group.playerList,
-                            displayEdit: widget.displayEdit,
-                            displayForm: false,
-                            deleteFunction: (player) {
-                              FirestoreGroupRepository.deleteFromGroup(
-                                  groupId: widget.group.groupId,
-                                  playerId: player.playerId);
-                            },
-                          ),
+                        child: Column(
+                          children: <Widget>[
+                            // ignore: avoid_unnecessary_containers
+                            Container(
+                                // width: double.infinity,
+                                child: Text(
+                              widget.group.title,
+                              textAlign: TextAlign.left,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 32),
+                            )),
+                            PlayerCardList(
+                              playerList: widget.group.playerList,
+                              displayEdit: widget.displayEdit,
+                              displayForm: false,
+                              deleteFunction: (player) {
+                                FirestoreGroupRepository.deleteFromGroup(
+                                    groupId: widget.group.groupId,
+                                    playerId: player.playerId);
+                              },
+                            ),
+                          ],
                         ))))),
         Padding(padding: const EdgeInsets.fromLTRB(8.0, 0, 0, 0)),
         TextButton(

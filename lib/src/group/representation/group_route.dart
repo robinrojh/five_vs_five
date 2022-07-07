@@ -31,7 +31,12 @@ class _GroupRouteState extends State<GroupRoute> {
   @override
   Widget build(context) {
     if (!_isLoading) {
-      return GroupCardList(groupList: groupList);
+      return Scaffold(
+        appBar: AppBar(
+          title: Text("Groups"),
+        ),
+        body: GroupCardList(groupList: groupList),
+      );
     } else {
       return CircularProgressIndicator();
     }

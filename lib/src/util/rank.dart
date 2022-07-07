@@ -61,8 +61,51 @@ class Rank extends Comparable<Rank> {
       case "Challenger":
         return 9;
       default:
-        return -1;
+        return -1; // invalid
     }
+  }
+
+  static int getTierNumber(String rank) {
+    /// rankList[0] contains the tier, and rankList[1] contains the number
+    /// if rankList[0] is a tier above diamond, rankList[1] would not exist.
+    List<String> rankList = rank.split(" ");
+    if (rankList.length > 1) {
+      return int.parse(rankList[1]);
+    } else {
+      return -1; // Master, Grandmaster, or Challenger
+    }
+  }
+
+  /// Returns the power of a player.
+  /// The power of a player is hard coded based on his/her rank.
+  static int getPower(String rank) {
+    int number = getTierNumber(rank);
+    if (number == -1) {
+      switch (rank) {
+        case "Master":
+          return 30;
+        case "Grand Master":
+          return 40;
+        case "Challenger":
+          return 50;
+      }
+    } else {
+      switch (rank) {
+        case "Iron":
+          return 0 + 5 - number; // 1 to 4
+        case "Bronze":
+          return 4 + 5 - number; // 5 to 8
+        case "Silver":
+          return 8 + 5 - number; // 9 to 12
+        case "Gold":
+          return 12 + 5 - number; // 13 to 16
+        case "Platinum":
+          return 16 + 5 - number; // 17 to 20
+        case "Diamond":
+          return 20 + 5 - number; // 21 to 24
+      }
+    }
+    return -1;
   }
 
   static List<String> getRankHelper(List<String> tiers, List<String> numbers) {
