@@ -2,7 +2,8 @@ import 'package:five_by_five/src/player/domain/player.dart';
 
 typedef GroupId = String;
 
-// Features: 1. Display players in a Group. 2. Allow tier-based 
+// Features: 1. Display players in a Group
+// 2. Allow automatic team-building
 class Group {
   Group({
     required this.groupId,

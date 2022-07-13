@@ -40,7 +40,8 @@ class FirestoreGroupRepository {
     await db.collection("groups").add(groupMap);
   }
 
-  static Future<void> addToGroup({required GroupId groupId, required PlayerId playerId}) async {
+  static Future<void> addToGroup(
+      {required GroupId groupId, required PlayerId playerId}) async {
     await db.collection("groups").doc(groupId).update({
       "playerList": FieldValue.arrayUnion([playerId]),
     });

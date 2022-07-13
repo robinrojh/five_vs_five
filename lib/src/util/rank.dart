@@ -1,3 +1,4 @@
+import 'package:five_by_five/src/player/domain/player.dart';
 import 'package:flutter/material.dart';
 
 class Rank extends Comparable<Rank> {
@@ -82,6 +83,8 @@ class Rank extends Comparable<Rank> {
     int number = getTierNumber(rank);
     if (number == -1) {
       switch (rank) {
+        case "Unranked":
+          return 0;
         case "Master":
           return 30;
         case "Grand Master":
@@ -116,6 +119,79 @@ class Rank extends Comparable<Rank> {
       }
     }
     return result;
+  }
+
+  /// Calculates the power difference between the two given teams.
+  /// If the returned value == 0, the two teams have the same power.
+  /// If the returned value < 0, team 2 is stronger than team 1.
+  /// If the returned value > 0, team 1 is stronger than team 2.
+  static double calculatePowerDifference(
+      List<Player> team1, List<Player> team2) {
+    if (team1.length != 5) {
+      return -1;
+    } else if (team2.length != 5) {
+      return -1;
+    }
+
+    double power1 = getTeamPower(team1);
+    double power2 = getTeamPower(team2);
+    return power1 - power2;
+  }
+
+  /// Returns the power of all players added, each player's power calculated as average of
+  /// current rank and highest rank.
+  static double getTeamPower(List<Player> team) {
+    double result = 0;
+    team.forEach((element) {
+      double power = (getPower(element.currentRank.toString()) +
+          getPower(element.highestRank.toString())) as double;
+      power /= 2;
+      result += power;
+    });
+    return result;
+  }
+
+  static List getAllSubsets(List list) =>
+      list.fold<List>([[]], (subLists, element) {
+        return subLists
+            .map((subList) => [
+                  subList,
+                  subList + [element]
+                ])
+            .expand((element) => element)
+            .toList();
+      });
+
+  static List getSizedSubsets(List list, int size) =>
+      getAllSubsets(list).where((element) => element.length == size).toList();
+
+  static List<Player> getOppositeTeam(
+      List<Player> team1, List<Player> playerList) {
+    if (team1.length != 5) {
+      throw Exception("The number of team members is not 5.");
+    }
+    List<Player> copyPlayerList = List.from(playerList);
+    team1.forEach((element) {
+      copyPlayerList.remove(element);
+    });
+    return copyPlayerList;
+  }
+
+  /// Returns all subsets of teams that has a power difference less than powerDifference.
+  static List<List<Player>> getSubsetsWithSimilarPower(
+      List<Player> playerList, double powerDifference) {
+    List<List<Player>>? teams =
+        getSizedSubsets(playerList, 5).cast<List<Player>>();
+    if (teams.isEmpty) {
+      throw Exception("An error occurred while sorting teams. ");
+    }
+    return teams
+        .where((team) =>
+            Rank.calculatePowerDifference(
+                    team, getOppositeTeam(team, playerList))
+                .abs() <
+            powerDifference)
+        .toList();
   }
 
   @override
