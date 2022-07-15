@@ -19,7 +19,6 @@ class FirestorePlayerRepository {
   }
 
   static Future<List<Player>> getPlayers() async {
-    FirebaseFirestore db = FirebaseFirestore.instance;
     var collection = await db.collection("players").get();
     var documentList = collection.docs;
     List<Player> playerList = List<Player>.empty(growable: true);
