@@ -3,12 +3,22 @@ import 'package:five_by_five/src/player/domain/player.dart';
 import 'package:five_by_five/src/player/presentation/edit_player_form.dart';
 import 'package:flutter/material.dart';
 
+typedef DeletePlayerFunction = void Function(Player player);
+
 class PlayerCard extends StatefulWidget {
-  PlayerCard({required this.player, required this.callback})
-      : super(key: ObjectKey(player));
+  PlayerCard({
+    required this.player,
+    required this.callback,
+    this.displayDelete = true,
+    this.displayEdit = true,
+    this.deleteFunction,
+  }) : super(key: ObjectKey(player));
 
   final Player player;
   final Function callback;
+  final bool displayDelete;
+  final bool displayEdit;
+  final DeletePlayerFunction? deleteFunction;
 
   @override
   _PlayerCardState createState() => _PlayerCardState();
@@ -27,7 +37,11 @@ class _PlayerCardState extends State<PlayerCard> {
     Widget continueButton = TextButton(
       child: Text("Delete"),
       onPressed: () {
-        FirestorePlayerRepository.deletePlayer(player: player);
+        if (widget.deleteFunction == null) {
+          FirestorePlayerRepository.deletePlayer(player: player);
+        } else {
+          widget.deleteFunction!(player);
+        }
         Navigator.of(context).pop();
       },
     );
@@ -47,7 +61,11 @@ class _PlayerCardState extends State<PlayerCard> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return alert;
+        if (widget.displayDelete) {
+          return alert;
+        } else {
+          return Container();
+        }
       },
     );
   }
@@ -81,7 +99,11 @@ class _PlayerCardState extends State<PlayerCard> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return alert;
+        if (widget.displayEdit) {
+          return alert;
+        } else {
+          return Container();
+        }
       },
     );
   }
@@ -117,17 +139,20 @@ class _PlayerCardState extends State<PlayerCard> {
                               style: const TextStyle(fontSize: 16.0),
                               widget.player.toString()),
                         ]))))),
-        TextButton(
-            style: TextButton.styleFrom(backgroundColor: Colors.red),
-            onPressed: () => {showEditDialog(context, widget.player)},
-            child: Text(style: TextStyle(color: Colors.white), "Edit")),
-        Padding(padding: const EdgeInsets.fromLTRB(8.0, 0, 0, 0)),
-        TextButton(
-            style: TextButton.styleFrom(backgroundColor: Colors.red),
-            onPressed: () {
-              showDeleteDialog(context, widget.player);
-            },
-            child: Text(style: TextStyle(color: Colors.white), "Delete")),
+        if (widget.displayEdit)
+          TextButton(
+              style: TextButton.styleFrom(backgroundColor: Colors.red),
+              onPressed: () => {showEditDialog(context, widget.player)},
+              child: Text(style: TextStyle(color: Colors.white), "Edit")),
+        if (widget.displayDelete)
+          Padding(padding: EdgeInsets.fromLTRB(8.0, 0, 0, 0)),
+        if (widget.displayDelete)
+          TextButton(
+              style: TextButton.styleFrom(backgroundColor: Colors.red),
+              onPressed: () {
+                showDeleteDialog(context, widget.player);
+              },
+              child: Text(style: TextStyle(color: Colors.white), "Delete")),
       ])
     ]);
   }

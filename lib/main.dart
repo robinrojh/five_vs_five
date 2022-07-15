@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:five_by_five/firebase_options.dart';
+import 'package:five_by_five/src/group/representation/group_route.dart';
 import 'package:five_by_five/src/player/data/repository/firestore_player_repository.dart';
 import 'package:five_by_five/src/player/domain/player.dart';
 import 'package:five_by_five/src/player/presentation/player_card_list.dart';
@@ -20,10 +21,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: '10 Man',
+      title: '10',
       theme: ThemeData(
         primarySwatch: Colors.red,
       ),
+      routes: {
+        '/groups': (context) => GroupRoute(),
+      },
       home: const Home(title: 'Five by Five'),
     );
   }
@@ -80,7 +84,7 @@ class _HomeState extends State<Home> {
               'Players',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
             ),
-            PlayerCardList(playerList: _playerList)
+            PlayerCardList(playerList: _playerList, displayForm: true,)
           ],
         ),
       )),
