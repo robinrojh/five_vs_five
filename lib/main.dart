@@ -29,8 +29,8 @@ class MyApp extends StatelessWidget {
       ),
       routes: {
         '/groups': (context) => GroupRoute(),
-        // '/signin': (context) => SignIn(),
-        // '/signup': (context) => SignUp(),
+        '/signin': (context) => SignIn(),
+        '/signup': (context) => SignUp(),
       },
       home: const Home(title: 'Five by Five'),
     );

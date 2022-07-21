@@ -1,21 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:five_by_five/src/player/domain/player.dart';
+import 'package:five_by_five/src/player/domain/firebase_user.dart';
 import 'package:flutter/cupertino.dart';
 
 FirebaseFirestore db = FirebaseFirestore.instance;
 
 class FirestorePlayerRepository {
   static Future<void> signIn(String email, String password) async {
-    FirebaseAuth auth = FirebaseAuth.instance;
-
-    await auth.signInWithEmailAndPassword(email: email, password: password);
+    await FirebaseAuth.instance
+        .signInWithEmailAndPassword(email: email, password: password);
   }
-  
-  static Future<void> signUp(String email, String password) async  {
-    FirebaseAuth auth = FirebaseAuth.instance;
 
-    await auth.createUserWithEmailAndPassword(email: email, password: password);
+  static Future<void> signUp(String email, String password) async {
+    await FirebaseAuth.instance
+        .createUserWithEmailAndPassword(email: email, password: password).then((value) {
+          FirebaseUser user = FirebaseUser(email: email, groupList: List<DocumentReference>.empty(growable: true));
+          db.collection("users").add(user.toMap());
+        });
   }
 
   static Future<List<Player>> getPlayers() async {
