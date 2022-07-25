@@ -1,6 +1,6 @@
 import 'package:five_by_five/src/group/data/repository/firestore_group_repository.dart';
 import 'package:five_by_five/src/group/domain/group.dart';
-import 'package:five_by_five/src/group/representation/group_card_list.dart';
+import 'package:five_by_five/src/group/presentation/group_card_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

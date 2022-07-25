@@ -1,5 +1,5 @@
 import 'package:five_by_five/src/group/domain/group.dart';
-import 'package:five_by_five/src/group/representation/group_card.dart';
+import 'package:five_by_five/src/group/presentation/group_card.dart';
 import 'package:flutter/material.dart';
 
 class GroupCardList extends StatefulWidget {

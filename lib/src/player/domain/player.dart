@@ -40,11 +40,6 @@ class Player {
   @override
   bool operator ==(Object other) {
     if (other is Player) {
-      print(playerId == other.playerId &&
-          name == other.name &&
-          currentRank == other.currentRank &&
-          highestRank == other.highestRank &&
-          mainLanes.every((element) => other.mainLanes.contains(element)));
       return playerId == other.playerId &&
           name == other.name &&
           currentRank == other.currentRank &&

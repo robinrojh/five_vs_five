@@ -1,9 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:five_by_five/firebase_options.dart';
-import 'package:five_by_five/src/group/representation/group_route.dart';
+import 'package:five_by_five/src/group/presentation/group_route.dart';
 import 'package:five_by_five/src/player/data/repository/firestore_player_repository.dart';
 import 'package:five_by_five/src/player/domain/player.dart';
 import 'package:five_by_five/src/player/presentation/player_card_list.dart';
+import 'package:five_by_five/src/player/presentation/sign_in.dart';
+import 'package:five_by_five/src/player/presentation/sign_up.dart';
 import 'package:flutter/material.dart';
 
 Future<void> main() async {
@@ -27,6 +29,8 @@ class MyApp extends StatelessWidget {
       ),
       routes: {
         '/groups': (context) => GroupRoute(),
+        '/signin': (context) => SignIn(),
+        '/signup': (context) => SignUp(),
       },
       home: const Home(title: 'Five by Five'),
     );
@@ -84,7 +88,10 @@ class _HomeState extends State<Home> {
               'Players',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
             ),
-            PlayerCardList(playerList: _playerList, displayForm: true,)
+            PlayerCardList(
+              playerList: _playerList,
+              displayForm: true,
+            )
           ],
         ),
       )),
