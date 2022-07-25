@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:five_by_five/src/player/domain/player.dart';
 import 'package:flutter/material.dart';
 
@@ -119,6 +121,23 @@ class Rank extends Comparable<Rank> {
       }
     }
     return result;
+  }
+
+  static Rank getRandomRank() {
+    int tier = Random().nextInt(9) + 1;
+    int number = Random().nextInt(4) + 1;
+    switch(tier) {
+      case 1: return Rank.fromString("Iron $number");
+      case 2: return Rank.fromString("Bronze $number");
+      case 3: return Rank.fromString("Silver $number");
+      case 4: return Rank.fromString("Gold $number");
+      case 5: return Rank.fromString("Platinum $number");
+      case 6: return Rank.fromString("Diamond $number");
+      case 7: return Rank.fromString("Master");
+      case 8: return Rank.fromString("Grand Master");
+      case 9: return Rank.fromString("Challenger");
+      default: return Rank.fromString("Silver 3");
+    }
   }
 
   /// Calculates the power difference between the two given teams.

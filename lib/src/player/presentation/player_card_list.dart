@@ -34,6 +34,14 @@ class _PlayerCardListState extends State<PlayerCardList> {
     }
   }
 
+  void makeTeams() {
+    if (_selectedPlayerList.length == 10) {
+      Rank.getSubsetsWithSimilarPower(_selectedPlayerList, 4);
+    } else {
+      throw Exception("The team must consist 10 players exactly!");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
