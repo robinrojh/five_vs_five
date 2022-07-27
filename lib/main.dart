@@ -71,6 +71,9 @@ class _HomeState extends State<Home> {
     //     await _addRandomPlayer();
     //   }
     // }
+    var team1 = Rank.getSubsetsWithSimilarPower(_playerList, 5)[0];
+    print(team1);
+    print(Rank.getOppositeTeam(team1, _playerList));
     setState(() {
       isLoading = false;
     });

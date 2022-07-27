@@ -56,11 +56,7 @@ packages:
       name: cloud_firestore_web
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
-    version: "2.8.0"
-=======
     version: "2.8.1"
->>>>>>> 3c94a9795461c0a0dc86deb2ce65ea3f2194fa0d
   collection:
     dependency: transitive
     description:
