@@ -23,8 +23,8 @@ class Player {
     return "Player ID: $playerId\n"
         "Name: $name\n"
         "Main Lane: $mainLanesString\n"
-        "Current Rank: ${currentRank.rank[0]} ${currentRank.rank[1]}\n"
-        "Highest Rank: ${highestRank.rank[0]} ${highestRank.rank[1]}";
+        "Current Rank: ${currentRank.rank.length == 2 ? "${currentRank.rank[0]} ${currentRank.rank[1]}" : currentRank.rank[0]}\n"
+        "Highest Rank: ${highestRank.rank.length == 2 ? "${highestRank.rank[0]} ${highestRank.rank[1]}" : highestRank.rank[0]}";
   }
 
   Map<String, dynamic> toMap() {

@@ -36,7 +36,7 @@ class Rank extends Comparable<Rank> {
     ];
     List<String> numberList = ["4", "3", "2", "1"];
     String master = "Master";
-    String grandMaster = "Grand Master";
+    String grandMaster = "Grandmaster";
     String challenger = "Challenger";
     List<String> rankList = getRankHelper(tierList, numberList);
     rankList.addAll([master, grandMaster, challenger]);
@@ -59,7 +59,7 @@ class Rank extends Comparable<Rank> {
         return 6;
       case "Master":
         return 7;
-      case "Grand Master":
+      case "Grandmaster":
         return 8;
       case "Challenger":
         return 9;
@@ -90,7 +90,7 @@ class Rank extends Comparable<Rank> {
           return 0;
         case "Master":
           return 30;
-        case "Grand Master":
+        case "Grandmaster":
           return 40;
         case "Challenger":
           return 50;
@@ -143,12 +143,25 @@ class Rank extends Comparable<Rank> {
       case 7:
         return Rank.fromString("Master");
       case 8:
-        return Rank.fromString("Grand Master");
+        return Rank.fromString("Grandmaster");
       case 9:
         return Rank.fromString("Challenger");
       default:
         return Rank.fromString("Silver 3");
     }
+  }
+
+  static List<String> getRandomLanes() {
+    List<String> lanes = List<String>.empty(growable: true);
+    List<String> mainLanes = ["Top", "Jungle", "Mid", "ADC", "Support"];
+    List<int> randomLaneNumbers = [0, 1, 2, 3, 4];
+    randomLaneNumbers.shuffle();
+    int count = Random().nextInt(5) + 1;
+    for (var k = 1; k <= count; k++) {
+      int random = randomLaneNumbers.removeLast();
+      lanes.add(mainLanes[random]);
+    }
+    return lanes;
   }
 
   /// Calculates the power difference between the two given teams.
@@ -222,10 +235,10 @@ class Rank extends Comparable<Rank> {
     }
     return teams.where((team) {
       List<Player> oppositeTeam = getOppositeTeam(team, playerList);
-      return Rank.calculatePowerDifference(
-                  team, oppositeTeam)
-              .abs() <
-          powerDifference && getLaneBalanceScore(team) >= 3 && getLaneBalanceScore(oppositeTeam) >= 3;
+      return Rank.calculatePowerDifference(team, oppositeTeam).abs() <
+              powerDifference &&
+          getLaneBalanceScore(team) >= 3 &&
+          getLaneBalanceScore(oppositeTeam) >= 3;
     }).toList();
   }
 

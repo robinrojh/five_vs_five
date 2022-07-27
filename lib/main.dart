@@ -66,12 +66,11 @@ class _HomeState extends State<Home> {
 
   void _getPlayers() async {
     _playerList.addAll(await FirestorePlayerRepository.getPlayers());
-    // if (_playerList.length < 10) {
-    //   for (var k = 0; k < 15; k++) {
-    //     await _addRandomPlayer();
-    //   }
-    // }
-    var team1 = Rank.getSubsetsWithSimilarPower(_playerList, 5)[2];
+    if (_playerList.length <= 10) {
+      for (var k = 0; k < 15; k++) {
+        await _addRandomPlayer();
+      }
+    }
     setState(() {
       isLoading = false;
     });
@@ -88,12 +87,13 @@ class _HomeState extends State<Home> {
     }
 
     dynamic wordList = [getRandomString(10), getRandomString(6)];
+    var rank = Rank.getRandomRank().rank;
     Player samplePlayer = Player.createPlayer({
       "playerId": wordList[0],
       "name": wordList[1],
-      "currentRank": Rank.fromString("Iron 4").rank,
-      "highestRank": Rank.getRandomRank().rank,
-      "mainLanes": ["Top", "Support"]
+      "currentRank": rank,
+      "highestRank": rank,
+      "mainLanes": Rank.getRandomLanes()
     });
     await FirestorePlayerRepository.addPlayer(player: samplePlayer);
   }
