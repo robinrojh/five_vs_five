@@ -220,13 +220,39 @@ class Rank extends Comparable<Rank> {
     if (subset.isEmpty) {
       throw Exception("An error occurred while sorting teams.");
     }
-    return teams
-        .where((team) =>
-            Rank.calculatePowerDifference(
-                    team, getOppositeTeam(team, playerList))
-                .abs() <
-            powerDifference)
-        .toList();
+    return teams.where((team) {
+      List<Player> oppositeTeam = getOppositeTeam(team, playerList);
+      return Rank.calculatePowerDifference(
+                  team, oppositeTeam)
+              .abs() <
+          powerDifference && getLaneBalanceScore(team) >= 3 && getLaneBalanceScore(oppositeTeam) >= 3;
+    }).toList();
+  }
+
+  static int getLaneBalanceScore(List<Player> playerList) {
+    if (playerList.length != 5) {
+      throw Exception("The player list must exactly contain 5 players.");
+    }
+    int score = 0;
+    Map<String, int> countMap = {
+      "Top": 0,
+      "Jungle": 0,
+      "Mid": 0,
+      "ADC": 0,
+      "Support": 0
+    };
+    for (var player in playerList) {
+      for (var lane in player.mainLanes) {
+        countMap[lane] = countMap[lane]! + 1;
+      }
+    }
+    return countMap.values.fold(0, (previousValue, element) {
+      int modifier = 0;
+      if (element > 0) {
+        modifier += 1;
+      }
+      return previousValue + modifier;
+    });
   }
 
   @override
