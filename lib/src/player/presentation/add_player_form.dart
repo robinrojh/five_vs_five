@@ -156,7 +156,6 @@ class _AddPlayerFormState extends State<AddPlayerForm> {
                           "highestRank": highestRank.rank,
                           "mainLanes": mainLanes,
                         });
-                        // try {
                         FirestorePlayerRepository.addPlayer(player: newPlayer)
                             .then((value) =>
                                 ScaffoldMessenger.of(context).showSnackBar(
@@ -166,6 +165,7 @@ class _AddPlayerFormState extends State<AddPlayerForm> {
                                       duration: Duration(seconds: 1)),
                                 ))
                             .catchError(((error, stackTrace) {
+                              print(error);
                           return ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                                 content: Text(

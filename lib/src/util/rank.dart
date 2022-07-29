@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:five_by_five/src/player/domain/player.dart';
 import 'package:flutter/material.dart';
 
@@ -34,7 +36,7 @@ class Rank extends Comparable<Rank> {
     ];
     List<String> numberList = ["4", "3", "2", "1"];
     String master = "Master";
-    String grandMaster = "Grand Master";
+    String grandMaster = "Grandmaster";
     String challenger = "Challenger";
     List<String> rankList = getRankHelper(tierList, numberList);
     rankList.addAll([master, grandMaster, challenger]);
@@ -57,7 +59,7 @@ class Rank extends Comparable<Rank> {
         return 6;
       case "Master":
         return 7;
-      case "Grand Master":
+      case "Grandmaster":
         return 8;
       case "Challenger":
         return 9;
@@ -70,7 +72,7 @@ class Rank extends Comparable<Rank> {
     /// rankList[0] contains the tier, and rankList[1] contains the number
     /// if rankList[0] is a tier above diamond, rankList[1] would not exist.
     List<String> rankList = rank.split(" ");
-    if (rankList.length > 1) {
+    if (rankList.length == 2) {
       return int.parse(rankList[1]);
     } else {
       return -1; // Master, Grandmaster, or Challenger
@@ -81,19 +83,20 @@ class Rank extends Comparable<Rank> {
   /// The power of a player is hard coded based on his/her rank.
   static int getPower(String rank) {
     int number = getTierNumber(rank);
+    String tier = rank.split(" ")[0];
     if (number == -1) {
-      switch (rank) {
+      switch (tier) {
         case "Unranked":
           return 0;
         case "Master":
           return 30;
-        case "Grand Master":
+        case "Grandmaster":
           return 40;
         case "Challenger":
           return 50;
       }
     } else {
-      switch (rank) {
+      switch (tier) {
         case "Iron":
           return 0 + 5 - number; // 1 to 4
         case "Bronze":
@@ -119,6 +122,46 @@ class Rank extends Comparable<Rank> {
       }
     }
     return result;
+  }
+
+  static Rank getRandomRank() {
+    int tier = Random().nextInt(9) + 1;
+    int number = Random().nextInt(4) + 1;
+    switch (tier) {
+      case 1:
+        return Rank.fromString("Iron $number");
+      case 2:
+        return Rank.fromString("Bronze $number");
+      case 3:
+        return Rank.fromString("Silver $number");
+      case 4:
+        return Rank.fromString("Gold $number");
+      case 5:
+        return Rank.fromString("Platinum $number");
+      case 6:
+        return Rank.fromString("Diamond $number");
+      case 7:
+        return Rank.fromString("Master");
+      case 8:
+        return Rank.fromString("Grandmaster");
+      case 9:
+        return Rank.fromString("Challenger");
+      default:
+        return Rank.fromString("Silver 3");
+    }
+  }
+
+  static List<String> getRandomLanes() {
+    List<String> lanes = List<String>.empty(growable: true);
+    List<String> mainLanes = ["Top", "Jungle", "Mid", "ADC", "Support"];
+    List<int> randomLaneNumbers = [0, 1, 2, 3, 4];
+    randomLaneNumbers.shuffle();
+    int count = Random().nextInt(5) + 1;
+    for (var k = 1; k <= count; k++) {
+      int random = randomLaneNumbers.removeLast();
+      lanes.add(mainLanes[random]);
+    }
+    return lanes;
   }
 
   /// Calculates the power difference between the two given teams.
@@ -180,23 +223,55 @@ class Rank extends Comparable<Rank> {
   /// Returns all subsets of teams that has a power difference less than powerDifference.
   static List<List<Player>> getSubsetsWithSimilarPower(
       List<Player> playerList, double powerDifference) {
-    List<List<Player>>? teams =
-        getSizedSubsets(playerList, 5).cast<List<Player>>();
-    if (teams.isEmpty) {
-      throw Exception("An error occurred while sorting teams. ");
+    List subset = getSizedSubsets(playerList, 5);
+    List<List<Player>> teams = List<List<Player>>.empty(growable: true);
+    subset.forEach((list) {
+      List<Player> newList = List<Player>.empty(growable: true);
+      list.forEach((player) => newList.add(player as Player));
+      teams.add(newList);
+    });
+    if (subset.isEmpty) {
+      throw Exception("An error occurred while sorting teams.");
     }
-    return teams
-        .where((team) =>
-            Rank.calculatePowerDifference(
-                    team, getOppositeTeam(team, playerList))
-                .abs() <
-            powerDifference)
-        .toList();
+    return teams.where((team) {
+      List<Player> oppositeTeam = getOppositeTeam(team, playerList);
+      return Rank.calculatePowerDifference(team, oppositeTeam).abs() <
+              powerDifference &&
+          getLaneBalanceScore(team) >= 3 &&
+          getLaneBalanceScore(oppositeTeam) >= 3;
+    }).toList();
+  }
+
+  static int getLaneBalanceScore(List<Player> playerList) {
+    if (playerList.length != 5) {
+      throw Exception("The player list must exactly contain 5 players.");
+    }
+    int score = 0;
+    Map<String, int> countMap = {
+      "Top": 0,
+      "Jungle": 0,
+      "Mid": 0,
+      "ADC": 0,
+      "Support": 0
+    };
+    for (var player in playerList) {
+      for (var lane in player.mainLanes) {
+        // countMap[lane] = countMap[lane]! + 1;
+        countMap.update(lane, (value) => countMap[lane]! + 1);
+      }
+    }
+    return countMap.values.fold(0, (previousValue, count) {
+      int modifier = 0;
+      if (count > 0) {
+        modifier += 1;
+      }
+      return previousValue + modifier;
+    });
   }
 
   @override
   String toString() {
-    return "${rank[0]} ${rank[1]}";
+    return rank.length == 2 ? "${rank[0]} ${rank[1]}" : rank[0];
   }
 
   @override

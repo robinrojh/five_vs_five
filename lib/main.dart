@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:five_by_five/firebase_options.dart';
 import 'package:five_by_five/src/group/presentation/group_route.dart';
@@ -6,6 +8,7 @@ import 'package:five_by_five/src/player/domain/player.dart';
 import 'package:five_by_five/src/player/presentation/player_card_list.dart';
 import 'package:five_by_five/src/player/presentation/sign_in.dart';
 import 'package:five_by_five/src/player/presentation/sign_up.dart';
+import 'package:five_by_five/src/util/rank.dart';
 import 'package:flutter/material.dart';
 
 Future<void> main() async {
@@ -52,7 +55,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  List<Player> _playerList = List<Player>.empty();
+  final List<Player> _playerList = List<Player>.empty(growable: true);
   bool isLoading = true;
 
   @override
@@ -62,10 +65,37 @@ class _HomeState extends State<Home> {
   }
 
   void _getPlayers() async {
-    _playerList = await FirestorePlayerRepository.getPlayers();
+    _playerList.addAll(await FirestorePlayerRepository.getPlayers());
+    // if (_playerList.length <= 10) {
+    //   for (var k = 0; k < 15; k++) {
+    //     await _addRandomPlayer();
+    //   }
+    // }
     setState(() {
       isLoading = false;
     });
+  }
+
+  Future<void> _addRandomPlayer() async {
+    const _chars =
+        'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+
+    String getRandomString(int length) {
+      Random _rnd = Random();
+      return String.fromCharCodes(Iterable.generate(
+          length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
+    }
+
+    dynamic wordList = [getRandomString(10), getRandomString(6)];
+    var rank = Rank.getRandomRank().rank;
+    Player samplePlayer = Player.createPlayer({
+      "playerId": wordList[0],
+      "name": wordList[1],
+      "currentRank": rank,
+      "highestRank": rank,
+      "mainLanes": Rank.getRandomLanes()
+    });
+    await FirestorePlayerRepository.addPlayer(player: samplePlayer);
   }
 
   @override

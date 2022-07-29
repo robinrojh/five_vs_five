@@ -23,8 +23,8 @@ class Player {
     return "Player ID: $playerId\n"
         "Name: $name\n"
         "Main Lane: $mainLanesString\n"
-        "Current Rank: ${currentRank.rank[0]} ${currentRank.rank[1]}\n"
-        "Highest Rank: ${highestRank.rank[0]} ${highestRank.rank[1]}";
+        "Current Rank: ${currentRank.rank.length == 2 ? "${currentRank.rank[0]} ${currentRank.rank[1]}" : currentRank.rank[0]}\n"
+        "Highest Rank: ${highestRank.rank.length == 2 ? "${highestRank.rank[0]} ${highestRank.rank[1]}" : highestRank.rank[0]}";
   }
 
   Map<String, dynamic> toMap() {
@@ -42,8 +42,8 @@ class Player {
     if (other is Player) {
       return playerId == other.playerId &&
           name == other.name &&
-          currentRank == other.currentRank &&
-          highestRank == other.highestRank &&
+          // currentRank == other.currentRank &&
+          // highestRank == other.highestRank &&
           mainLanes.every((element) => other.mainLanes.contains(element));
     } else {
       return false;
@@ -61,4 +61,8 @@ class Player {
         highestRank: Rank(rank: highestRank),
         mainLanes: mainLanes);
   }
+  
+  @override
+  int get hashCode => super.hashCode;
+  
 }
