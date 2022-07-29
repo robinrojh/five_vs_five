@@ -256,12 +256,13 @@ class Rank extends Comparable<Rank> {
     };
     for (var player in playerList) {
       for (var lane in player.mainLanes) {
-        countMap[lane] = countMap[lane]! + 1;
+        // countMap[lane] = countMap[lane]! + 1;
+        countMap.update(lane, (value) => countMap[lane]! + 1);
       }
     }
-    return countMap.values.fold(0, (previousValue, element) {
+    return countMap.values.fold(0, (previousValue, count) {
       int modifier = 0;
-      if (element > 0) {
+      if (count > 0) {
         modifier += 1;
       }
       return previousValue + modifier;
@@ -270,7 +271,7 @@ class Rank extends Comparable<Rank> {
 
   @override
   String toString() {
-    return "${rank[0]} ${rank[1]}";
+    return rank.length == 2 ? "${rank[0]} ${rank[1]}" : rank[0];
   }
 
   @override

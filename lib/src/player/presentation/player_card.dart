@@ -11,6 +11,7 @@ class PlayerCard extends StatefulWidget {
     required this.callback,
     this.displayDelete = true,
     this.displayEdit = true,
+    this.displayCheckBox = true,
     this.deleteFunction,
   }) : super(key: ObjectKey(player));
 
@@ -18,6 +19,7 @@ class PlayerCard extends StatefulWidget {
   final Function callback;
   final bool displayDelete;
   final bool displayEdit;
+  final bool displayCheckBox;
   final DeletePlayerFunction? deleteFunction;
 
   @override
@@ -124,7 +126,7 @@ class _PlayerCardState extends State<PlayerCard> {
         GestureDetector(
             onTap: () => {onCheckboxClick(isChecked)},
             child: SizedBox(
-                width: 960,
+                width: 480,
                 child: Card(
                     child: Padding(
                         padding: const EdgeInsets.all(24.0),
@@ -132,8 +134,11 @@ class _PlayerCardState extends State<PlayerCard> {
                           Padding(
                             padding:
                                 const EdgeInsets.fromLTRB(0.0, 0.0, 24.0, 0.0),
-                            child: Checkbox(
-                                value: isChecked, onChanged: onCheckboxClick),
+                            child: widget.displayCheckBox
+                                ? Checkbox(
+                                    value: isChecked,
+                                    onChanged: onCheckboxClick)
+                                : Container(),
                           ),
                           Text(
                               style: const TextStyle(fontSize: 16.0),

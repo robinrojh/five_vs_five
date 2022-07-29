@@ -42,8 +42,8 @@ class Player {
     if (other is Player) {
       return playerId == other.playerId &&
           name == other.name &&
-          currentRank == other.currentRank &&
-          highestRank == other.highestRank &&
+          // currentRank == other.currentRank &&
+          // highestRank == other.highestRank &&
           mainLanes.every((element) => other.mainLanes.contains(element));
     } else {
       return false;
@@ -61,4 +61,8 @@ class Player {
         highestRank: Rank(rank: highestRank),
         mainLanes: mainLanes);
   }
+  
+  @override
+  int get hashCode => super.hashCode;
+  
 }

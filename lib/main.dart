@@ -55,7 +55,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  List<Player> _playerList = List<Player>.empty(growable: true);
+  final List<Player> _playerList = List<Player>.empty(growable: true);
   bool isLoading = true;
 
   @override
@@ -66,11 +66,11 @@ class _HomeState extends State<Home> {
 
   void _getPlayers() async {
     _playerList.addAll(await FirestorePlayerRepository.getPlayers());
-    if (_playerList.length <= 10) {
-      for (var k = 0; k < 15; k++) {
-        await _addRandomPlayer();
-      }
-    }
+    // if (_playerList.length <= 10) {
+    //   for (var k = 0; k < 15; k++) {
+    //     await _addRandomPlayer();
+    //   }
+    // }
     setState(() {
       isLoading = false;
     });
