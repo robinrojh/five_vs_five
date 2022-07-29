@@ -26,7 +26,8 @@ class PlayerCardList extends StatefulWidget {
 
 class _PlayerCardListState extends State<PlayerCardList> {
   final List<Player> _selectedPlayerList = [];
-  int teamIndex = 0;
+  int _teamIndex = 0;
+  List<List<Player>> _allTeams = [];
   List<Player> _team1 = [];
   List<Player> _team2 = [];
   void handleCheckbox(bool isChecked, Player player) {
@@ -44,11 +45,48 @@ class _PlayerCardListState extends State<PlayerCardList> {
       List<List<Player>> allTeams =
           Rank.getSubsetsWithSimilarPower(_selectedPlayerList, 4);
       setState(() {
+        _allTeams = allTeams;
         _team1 = allTeams[0];
         _team2 = Rank.getOppositeTeam(allTeams[0], _selectedPlayerList);
       });
     } else {
       throw Exception("The team must consist 10 players exactly!");
+    }
+  }
+
+  void getPreviousTeam() {
+    if (_teamIndex > 0) {
+      setState(() {
+        _team1 = _allTeams[_teamIndex - 1];
+        _team2 = Rank.getOppositeTeam(
+            _allTeams[_teamIndex - 1], _selectedPlayerList);
+        _teamIndex = _teamIndex - 1;
+      });
+    } else {
+      int teamCount = _allTeams.length - 1;
+      setState(() {
+        _team1 = _allTeams[teamCount];
+        _team2 =
+            Rank.getOppositeTeam(_allTeams[teamCount], _selectedPlayerList);
+        _teamIndex = teamCount;
+      });
+    }
+  }
+
+  void getNextTeam() {
+    if (_teamIndex + 1 < _allTeams.length) {
+      setState(() {
+        _team1 = _allTeams[_teamIndex + 1];
+        _team2 = Rank.getOppositeTeam(
+            _allTeams[_teamIndex + 1], _selectedPlayerList);
+        _teamIndex = _teamIndex + 1;
+      });
+    } else {
+      setState(() {
+        _team1 = _allTeams[0];
+        _team2 = Rank.getOppositeTeam(_allTeams[0], _selectedPlayerList);
+        _teamIndex = 0;
+      });
     }
   }
 
@@ -64,12 +102,23 @@ class _PlayerCardListState extends State<PlayerCardList> {
               onPressed: makeTeams,
             ),
           ),
-          Row(
-            children: [
-              TeamCard(playerList: _team1),
-              TeamCard(playerList: _team2)
-            ],
-          ),
+          Column(children: [
+            if (!_allTeams.isEmpty)
+              ElevatedButton(
+                  onPressed: getPreviousTeam,
+                  child:
+                      Text("Previous  ${_teamIndex + 1}/${_allTeams.length}")),
+            if (!_allTeams.isEmpty)
+              ElevatedButton(
+                  onPressed: getNextTeam,
+                  child: Text("Next ${_teamIndex + 1}/${_allTeams.length}")),
+            Row(
+              children: [
+                TeamCard(playerList: _team1),
+                TeamCard(playerList: _team2)
+              ],
+            ),
+          ]),
           ListView.builder(
               shrinkWrap: true,
               itemCount: widget.playerList.length,
