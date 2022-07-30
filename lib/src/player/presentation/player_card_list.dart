@@ -119,10 +119,14 @@ class _PlayerCardListState extends State<PlayerCardList> {
               ],
             ),
           ]),
-          ListView.builder(
-              shrinkWrap: true,
-              itemCount: widget.playerList.length,
-              itemBuilder: (context, index) {
+          SizedBox(
+            height: MediaQuery.of(context).size.height / 2,
+            child: GridView.count(
+              crossAxisCount: 2,
+              childAspectRatio: 8/2,
+              mainAxisSpacing: 8,
+              children: List.generate(widget.playerList.length,
+                  (index) {
                 return PlayerCard(
                   player: widget.playerList[index],
                   callback: handleCheckbox,
@@ -130,7 +134,9 @@ class _PlayerCardListState extends State<PlayerCardList> {
                   displayEdit: widget.displayEdit,
                   deleteFunction: widget.deleteFunction,
                 );
-              })
+              }),
+            ),
+          ),
         ]));
   }
 }
