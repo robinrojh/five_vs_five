@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:five_by_five/src/player/domain/player.dart';
 import 'package:five_by_five/src/player/presentation/add_player_form.dart';
 import 'package:five_by_five/src/player/presentation/player_card.dart';
@@ -92,51 +93,54 @@ class _PlayerCardListState extends State<PlayerCardList> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-        width: 1280,
-        child: Column(children: <Widget>[
-          if (widget.displayForm) AddPlayerForm(),
-          Center(
-            child: ElevatedButton(
-              child: Text("Make Team"),
-              onPressed: makeTeams,
+    if (FirebaseAuth.instance.currentUser != null) {
+      return SizedBox(
+          width: 1280,
+          child: Column(children: <Widget>[
+            if (widget.displayForm) AddPlayerForm(),
+            Center(
+              child: ElevatedButton(
+                child: Text("Make Team"),
+                onPressed: makeTeams,
+              ),
             ),
-          ),
-          Column(children: [
-            if (!_allTeams.isEmpty)
-              ElevatedButton(
-                  onPressed: getPreviousTeam,
-                  child:
-                      Text("Previous  ${_teamIndex + 1}/${_allTeams.length}")),
-            if (!_allTeams.isEmpty)
-              ElevatedButton(
-                  onPressed: getNextTeam,
-                  child: Text("Next ${_teamIndex + 1}/${_allTeams.length}")),
-            Row(
-              children: [
-                TeamCard(playerList: _team1),
-                TeamCard(playerList: _team2)
-              ],
+            Column(children: [
+              if (!_allTeams.isEmpty)
+                ElevatedButton(
+                    onPressed: getPreviousTeam,
+                    child: Text(
+                        "Previous  ${_teamIndex + 1}/${_allTeams.length}")),
+              if (!_allTeams.isEmpty)
+                ElevatedButton(
+                    onPressed: getNextTeam,
+                    child: Text("Next ${_teamIndex + 1}/${_allTeams.length}")),
+              Row(
+                children: [
+                  TeamCard(playerList: _team1),
+                  TeamCard(playerList: _team2)
+                ],
+              ),
+            ]),
+            SizedBox(
+              height: MediaQuery.of(context).size.height / 2,
+              child: GridView.count(
+                crossAxisCount: 2,
+                childAspectRatio: 8 / 2,
+                mainAxisSpacing: 8,
+                children: List.generate(widget.playerList.length, (index) {
+                  return PlayerCard(
+                    player: widget.playerList[index],
+                    callback: handleCheckbox,
+                    displayDelete: widget.displayDelete,
+                    displayEdit: widget.displayEdit,
+                    deleteFunction: widget.deleteFunction,
+                  );
+                }),
+              ),
             ),
-          ]),
-          SizedBox(
-            height: MediaQuery.of(context).size.height / 2,
-            child: GridView.count(
-              crossAxisCount: 2,
-              childAspectRatio: 8/2,
-              mainAxisSpacing: 8,
-              children: List.generate(widget.playerList.length,
-                  (index) {
-                return PlayerCard(
-                  player: widget.playerList[index],
-                  callback: handleCheckbox,
-                  displayDelete: widget.displayDelete,
-                  displayEdit: widget.displayEdit,
-                  deleteFunction: widget.deleteFunction,
-                );
-              }),
-            ),
-          ),
-        ]));
+          ]));
+    } else {
+      return Text("Please Sign In first!");
+    }
   }
 }

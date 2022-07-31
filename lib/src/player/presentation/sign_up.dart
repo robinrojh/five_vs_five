@@ -111,6 +111,16 @@ class _SignUpState extends State<SignUp> {
                     ),
                   ),
                 ),
+                Center(
+                  child: InkWell(
+                    child: Text(
+                      "Sign In Here!",
+                      style: TextStyle(color: Colors.blue),
+                    ),
+                    onTap: () =>
+                        Navigator.pushReplacementNamed(context, "/signin"),
+                  ),
+                ),
               ],
             )));
   }

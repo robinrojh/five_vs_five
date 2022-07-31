@@ -14,10 +14,13 @@ class FirestorePlayerRepository {
 
   static Future<void> signUp(String email, String password) async {
     await FirebaseAuth.instance
-        .createUserWithEmailAndPassword(email: email, password: password).then((value) {
-          FirebaseUser user = FirebaseUser(email: email, groupList: List<DocumentReference>.empty(growable: true));
-          db.collection("users").add(user.toMap());
-        });
+        .createUserWithEmailAndPassword(email: email, password: password)
+        .then((value) {
+      FirebaseUser user = FirebaseUser(
+          email: email,
+          groupList: List<DocumentReference>.empty(growable: true));
+      db.collection("users").add(user.toMap());
+    });
   }
 
   static Future<List<Player>> getPlayers() async {
@@ -45,6 +48,7 @@ class FirestorePlayerRepository {
           "currentRank": player.currentRank.rank,
           "highestRank": player.highestRank.rank,
           "mainLanes": player.mainLanes,
+          "creatorId": FirebaseAuth.instance.currentUser
         });
         isSuccess = true;
       }
@@ -65,6 +69,7 @@ class FirestorePlayerRepository {
         "currentRank": editedPlayer.currentRank.rank,
         "highestRank": editedPlayer.highestRank.rank,
         "mainLanes": editedPlayer.mainLanes,
+        "creatorId": FirebaseAuth.instance.currentUser
       });
     } else {
       throw Exception("At least one field must be edited.");
@@ -73,5 +78,8 @@ class FirestorePlayerRepository {
 
   static Future<void> deletePlayer({required Player player}) async {
     await db.collection("players").doc(player.playerId).delete();
+    await db.collection("logs").add({
+      "owner": FirebaseAuth.instance.currentUser,
+    });
   }
 }

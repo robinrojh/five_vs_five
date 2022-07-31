@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:five_by_five/firebase_options.dart';
 import 'package:five_by_five/src/group/presentation/group_route.dart';
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.red,
       ),
+      initialRoute: FirebaseAuth.instance.currentUser == null ? '/signin' : '/',
       routes: {
         '/groups': (context) => GroupRoute(),
         '/signin': (context) => SignIn(),
@@ -118,10 +120,19 @@ class _HomeState extends State<Home> {
               'Players',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
             ),
-            PlayerCardList(
-              playerList: _playerList,
-              displayForm: true,
-            )
+            if (FirebaseAuth.instance.currentUser != null)
+              PlayerCardList(
+                playerList: _playerList,
+                displayForm: true,
+              )
+            else
+              InkWell(
+                child: Text(
+                  "Please Sign In first!",
+                  style: TextStyle(color: Colors.blue),
+                ),
+                onTap: () => Navigator.pushReplacementNamed(context, "/signin"),
+              )
           ],
         ),
       )),
